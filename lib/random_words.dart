@@ -1,6 +1,23 @@
 import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
 
+class SelectedNames extends StatefulWidget {
+  final String startupName;
+
+  const SelectedNames({Key? key, required this.startupName}) : super(key: key);
+
+  @override
+  State<SelectedNames> createState() => _SelectedNamesState();
+}
+
+class _SelectedNamesState extends State<SelectedNames> {
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(itemBuilder: (context, index) =>
+      Text(widget.startupName)
+    );
+  }
+}
 
 class RandomWords extends StatefulWidget {
   const RandomWords({Key? key}) : super(key: key);
@@ -32,7 +49,9 @@ class _RandomWordsState extends State<RandomWords> {
               ),
               child: const Icon(Icons.replay),
             ),
-          )
+          ),
+          Padding(padding: const EdgeInsets.only(top:20.0),
+          child: SelectedNames(startupName: starupName),)
         ]),
       ),
       bottomNavigationBar: BottomAppBar(
