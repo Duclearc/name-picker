@@ -2,7 +2,7 @@ import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
 
 class SelectedNames extends StatefulWidget {
-  final String startupName;
+  final List startupName;
 
   const SelectedNames({Key? key, required this.startupName}) : super(key: key);
 
@@ -13,9 +13,7 @@ class SelectedNames extends StatefulWidget {
 class _SelectedNamesState extends State<SelectedNames> {
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(itemBuilder: (context, index) =>
-      Text(widget.startupName)
-    );
+    return Text(widget.startupName.toString());
   }
 }
 
@@ -26,7 +24,8 @@ class RandomWords extends StatefulWidget {
 }
 
 class _RandomWordsState extends State<RandomWords> {
-  var starupName = 'Press the blue button to start';
+  var startupName = 'Press the blue button to start';
+  final selectedNames = [];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,7 +34,7 @@ class _RandomWordsState extends State<RandomWords> {
         child: Column(children: [
           Center(
             child: Text(
-              starupName,
+              startupName,
               style: const TextStyle(fontSize: 38),
             ),
           ),
@@ -44,14 +43,16 @@ class _RandomWordsState extends State<RandomWords> {
             child: FloatingActionButton(
               onPressed: () => setState(
                 () {
-                  starupName = WordPair.random().asPascalCase;
+                  startupName = WordPair.random().asPascalCase;
                 },
               ),
               child: const Icon(Icons.replay),
             ),
           ),
-          Padding(padding: const EdgeInsets.only(top:20.0),
-          child: SelectedNames(startupName: starupName),)
+          Padding(
+            padding: const EdgeInsets.only(top: 20.0),
+            child: SelectedNames(startupName: selectedNames),
+          )
         ]),
       ),
       bottomNavigationBar: BottomAppBar(
@@ -62,7 +63,8 @@ class _RandomWordsState extends State<RandomWords> {
             FloatingActionButton(
               onPressed: () => setState(
                 () {
-                  starupName = starupName.replaceAll(RegExp(' ✅'), '');
+                  selectedNames
+                      .removeWhere((element) => element == startupName.replaceAll(RegExp(' ✅'), ''));
                 },
               ),
               backgroundColor: Colors.red,
@@ -70,7 +72,8 @@ class _RandomWordsState extends State<RandomWords> {
             ),
             FloatingActionButton(
               onPressed: () => setState(() {
-                starupName = '$starupName ✅';
+                selectedNames.add(startupName);
+                startupName = '$startupName ✅';
               }),
               backgroundColor: Colors.green,
               child: const Icon(Icons.check),
