@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:startup_namer/button_icon_round.dart';
 
 class SelectedNames extends StatefulWidget {
-  final List startupName;
+  final List selectedNames;
 
-  const SelectedNames({Key? key, required this.startupName}) : super(key: key);
+  const SelectedNames({Key? key, required this.selectedNames})
+      : super(key: key);
 
   @override
   State<SelectedNames> createState() => _SelectedNamesState();
@@ -14,7 +15,7 @@ class SelectedNames extends StatefulWidget {
 class _SelectedNamesState extends State<SelectedNames> {
   @override
   Widget build(BuildContext context) {
-    return Text(widget.startupName.toString());
+    return Text(widget.selectedNames.toString());
   }
 }
 
@@ -26,36 +27,31 @@ class RandomWords extends StatefulWidget {
 
 class _RandomWordsState extends State<RandomWords> {
   final initialPlaceholderText = 'Press the blue button to start';
-  String startupName = '';
+  String suggestedName = '';
   final selectedNames = [];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.only(top: 50.0),
-        child: Column(children: [
-          Center(
-            child: Text(
-              startupName.isEmpty ? initialPlaceholderText : startupName,
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Text(
+              suggestedName.isEmpty ? initialPlaceholderText : suggestedName,
+              textAlign: TextAlign.center,
               style: const TextStyle(fontSize: 38),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 20.0),
-            child: FloatingActionButton(
+            FloatingActionButton(
               onPressed: () => setState(
                 () {
-                  startupName = WordPair.random().asPascalCase;
+                  suggestedName = WordPair.random().asPascalCase;
                 },
               ),
               child: const Icon(Icons.replay),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 20.0),
-            child: SelectedNames(startupName: selectedNames),
-          )
-        ]),
+            SelectedNames(selectedNames: selectedNames),
+          ],
+        ),
       ),
       bottomNavigationBar: BottomAppBar(
         elevation: 0.0,
@@ -63,21 +59,22 @@ class _RandomWordsState extends State<RandomWords> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             ButtonIconRound(
-              state: startupName.isEmpty,
+              state: suggestedName.isEmpty,
               color: Colors.red,
               icon: Icons.remove,
               onPressed: () => setState(() {
                 selectedNames.removeWhere((element) =>
-                    element == startupName.replaceAll(RegExp(' ✅'), ''));
+                    element == suggestedName.replaceAll(RegExp(' ✅'), ''));
+                suggestedName = suggestedName.replaceAll(RegExp(' ✅'), '');
               }),
             ),
             ButtonIconRound(
-              state: startupName.isEmpty,
+              state: suggestedName.isEmpty,
               color: Colors.green,
               icon: Icons.check,
               onPressed: () => setState(() {
-                selectedNames.add(startupName);
-                startupName = '$startupName ✅';
+                selectedNames.add(suggestedName);
+                suggestedName = '$suggestedName ✅';
               }),
             ),
           ],
