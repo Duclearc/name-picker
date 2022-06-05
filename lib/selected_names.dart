@@ -15,11 +15,15 @@ class _SelectedNamesState extends State<SelectedNames> {
   Widget build(BuildContext context) {
     // return Text(widget.selectedNames.toString());
     return Flexible(
-      child: ListView(
-        shrinkWrap: true,
-        children: widget.selectedNames
-            .map((e) => Text(e, textAlign: TextAlign.center))
-            .toList(),
+      child: Scrollbar(
+        thumbVisibility: true,
+        thickness: 5,
+        child: ListView(
+          shrinkWrap: true,
+          children: widget.selectedNames
+              .map((e) => Text(e, textAlign: TextAlign.center))
+              .toList(),
+        ),
       ),
     );
   }
