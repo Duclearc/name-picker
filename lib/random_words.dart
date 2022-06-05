@@ -1,5 +1,6 @@
 import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
+import 'package:startup_namer/button_icon_round.dart';
 
 class SelectedNames extends StatefulWidget {
   final List startupName;
@@ -24,7 +25,8 @@ class RandomWords extends StatefulWidget {
 }
 
 class _RandomWordsState extends State<RandomWords> {
-  var startupName = 'Press the blue button to start';
+  final initialPlaceholderText = 'Press the blue button to start';
+  String startupName = '';
   final selectedNames = [];
   @override
   Widget build(BuildContext context) {
@@ -34,7 +36,7 @@ class _RandomWordsState extends State<RandomWords> {
         child: Column(children: [
           Center(
             child: Text(
-              startupName,
+              startupName.isEmpty ? initialPlaceholderText : startupName,
               style: const TextStyle(fontSize: 38),
             ),
           ),
@@ -60,23 +62,23 @@ class _RandomWordsState extends State<RandomWords> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            FloatingActionButton(
-              onPressed: () => setState(
-                () {
-                  selectedNames
-                      .removeWhere((element) => element == startupName.replaceAll(RegExp(' ✅'), ''));
-                },
-              ),
-              backgroundColor: Colors.red,
-              child: const Icon(Icons.remove),
+            ButtonIconRound(
+              state: startupName.isEmpty,
+              color: Colors.red,
+              icon: Icons.remove,
+              onPressed: () => setState(() {
+                selectedNames.removeWhere((element) =>
+                    element == startupName.replaceAll(RegExp(' ✅'), ''));
+              }),
             ),
-            FloatingActionButton(
+            ButtonIconRound(
+              state: startupName.isEmpty,
+              color: Colors.green,
+              icon: Icons.check,
               onPressed: () => setState(() {
                 selectedNames.add(startupName);
                 startupName = '$startupName ✅';
               }),
-              backgroundColor: Colors.green,
-              child: const Icon(Icons.check),
             ),
           ],
         ),
