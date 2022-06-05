@@ -1,23 +1,8 @@
-import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
+
 import 'package:startup_namer/button_icon_round.dart';
-
-class SelectedNames extends StatefulWidget {
-  final List selectedNames;
-
-  const SelectedNames({Key? key, required this.selectedNames})
-      : super(key: key);
-
-  @override
-  State<SelectedNames> createState() => _SelectedNamesState();
-}
-
-class _SelectedNamesState extends State<SelectedNames> {
-  @override
-  Widget build(BuildContext context) {
-    return Text(widget.selectedNames.toString());
-  }
-}
+import 'package:english_words/english_words.dart';
+import 'package:startup_namer/selected_names.dart';
 
 class RandomWords extends StatefulWidget {
   const RandomWords({Key? key}) : super(key: key);
