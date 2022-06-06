@@ -1,4 +1,4 @@
-# startup_namer
+# name picker
 
 A new Flutter project.
 
