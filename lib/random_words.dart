@@ -11,9 +11,9 @@ class RandomWords extends StatefulWidget {
 }
 
 class _RandomWordsState extends State<RandomWords> {
-  final initialPlaceholderText = 'Press the blue button to start';
-  String suggestedName = '';
-  final selectedNames = [];
+  final _initialPlaceholderText = 'Press the blue button to start';
+  String _suggestedName = '';
+  final _selectedNames = [];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,19 +22,19 @@ class _RandomWordsState extends State<RandomWords> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             Text(
-              suggestedName.isEmpty ? initialPlaceholderText : suggestedName,
+              _suggestedName.isEmpty ? _initialPlaceholderText : _suggestedName,
               textAlign: TextAlign.center,
               style: const TextStyle(fontSize: 38),
             ),
             FloatingActionButton(
               onPressed: () => setState(
                 () {
-                  suggestedName = WordPair.random().asPascalCase;
+                  _suggestedName = WordPair.random().asPascalCase;
                 },
               ),
               child: const Icon(Icons.replay),
             ),
-            SelectedNames(selectedNames: selectedNames),
+            SelectedNames(selectedNames: _selectedNames),
           ],
         ),
       ),
@@ -44,22 +44,22 @@ class _RandomWordsState extends State<RandomWords> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             ButtonIconRound(
-              state: suggestedName.isEmpty,
+              state: _suggestedName.isEmpty,
               color: Colors.red,
               icon: Icons.remove,
               onPressed: () => setState(() {
-                selectedNames.removeWhere((element) =>
-                    element == suggestedName.replaceAll(RegExp(' ✅'), ''));
-                suggestedName = suggestedName.replaceAll(RegExp(' ✅'), '');
+                _selectedNames.removeWhere((element) =>
+                    element == _suggestedName.replaceAll(RegExp(' ✅'), ''));
+                _suggestedName = _suggestedName.replaceAll(RegExp(' ✅'), '');
               }),
             ),
             ButtonIconRound(
-              state: suggestedName.isEmpty,
+              state: _suggestedName.isEmpty,
               color: Colors.green,
               icon: Icons.check,
               onPressed: () => setState(() {
-                selectedNames.add(suggestedName);
-                suggestedName = '$suggestedName ✅';
+                _selectedNames.add(_suggestedName);
+                _suggestedName = '$_suggestedName ✅';
               }),
             ),
           ],
