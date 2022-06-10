@@ -11,9 +11,9 @@ class SelectedNames extends StatefulWidget {
 }
 
 class _SelectedNamesState extends State<SelectedNames> {
+  bool isChecked = false;
   @override
   Widget build(BuildContext context) {
-    // return Text(widget.selectedNames.toString());
     return Flexible(
       child: Scrollbar(
         thumbVisibility: true,
@@ -21,7 +21,40 @@ class _SelectedNamesState extends State<SelectedNames> {
         child: ListView(
           shrinkWrap: true,
           children: widget.selectedNames
-              .map((e) => Text(e, textAlign: TextAlign.center))
+              .map(
+                (e) => Card(
+                  elevation: 0,
+                  shape: RoundedRectangleBorder(
+                    side: BorderSide(
+                      color: Color(Colors.blue.value),
+                    ),
+                    borderRadius: const BorderRadius.all(Radius.circular(12)),
+                  ),
+                  child: SizedBox(
+                    width: 300,
+                    height: 100,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Text(
+                          e,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(fontSize: 25),
+                        ),
+                        Checkbox(
+                          value: isChecked,
+                          fillColor: MaterialStateProperty.all(Colors.blue),
+                          onChanged: (bool? value) {
+                            setState(() {
+                              isChecked = value!;
+                            });
+                          },
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              )
               .toList(),
         ),
       ),
