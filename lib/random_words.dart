@@ -44,7 +44,7 @@ class _RandomWordsState extends State<RandomWords> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             ButtonIconRound(
-              state: _suggestedName.isEmpty,
+              state: _selectedNames.isEmpty,
               color: Colors.red,
               icon: Icons.remove,
               onPressed: () => setState(() {
