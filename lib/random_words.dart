@@ -21,19 +21,31 @@ class _RandomWordsState extends State<RandomWords> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            Text(
-              _suggestedName.isEmpty ? _initialPlaceholderText : _suggestedName,
-              textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 38),
-            ),
-            FloatingActionButton(
-              onPressed: () => setState(
-                () {
-                  _suggestedName = WordPair.random().asPascalCase;
-                },
-              ),
-              child: const Icon(Icons.replay),
-            ),
+            Padding(
+                padding: const EdgeInsets.symmetric(vertical: 50.0),
+                child: Column(
+                  // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      _suggestedName.isEmpty
+                          ? _initialPlaceholderText
+                          : _suggestedName,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(fontSize: 38),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 20.0),
+                      child: FloatingActionButton(
+                        onPressed: () => setState(
+                          () {
+                            _suggestedName = WordPair.random().asPascalCase;
+                          },
+                        ),
+                        child: const Icon(Icons.replay),
+                      ),
+                    )
+                  ],
+                )),
             SelectedNames(selectedNames: _selectedNames),
           ],
         ),
