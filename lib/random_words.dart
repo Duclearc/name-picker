@@ -48,9 +48,15 @@ class _RandomWordsState extends State<RandomWords> {
               color: Colors.red,
               icon: Icons.remove,
               onPressed: () => setState(() {
-                _selectedNames.removeWhere((element) =>
-                    element == _suggestedName.replaceAll(RegExp(' ✅'), ''));
-                _suggestedName = _suggestedName.replaceAll(RegExp(' ✅'), '');
+                // remove from list
+                _selectedNames
+                    .removeWhere((element) => element['remove'] == true);
+                // if _suggestedName isn't on the list, remove checkmark
+                if (_selectedNames.indexWhere(
+                        (element) => element['name'] == _suggestedName) <
+                    0) {
+                  _suggestedName = _suggestedName.replaceAll(RegExp(' ✅'), '');
+                }
               }),
             ),
             ButtonIconRound(
@@ -58,7 +64,10 @@ class _RandomWordsState extends State<RandomWords> {
               color: Colors.green,
               icon: Icons.check,
               onPressed: () => setState(() {
-                _selectedNames.add(_suggestedName);
+                if (_suggestedName.contains('✅')) {
+                  return;
+                }
+                _selectedNames.add({'name': _suggestedName, 'remove': false});
                 _suggestedName = '$_suggestedName ✅';
               }),
             ),

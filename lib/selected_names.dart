@@ -37,16 +37,23 @@ class _SelectedNamesState extends State<SelectedNames> {
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         Text(
-                          e,
+                          e['name'],
                           textAlign: TextAlign.center,
                           style: const TextStyle(fontSize: 25),
                         ),
                         Checkbox(
-                          value: isChecked,
+                          value: e['remove'],
                           fillColor: MaterialStateProperty.all(Colors.blue),
                           onChanged: (bool? value) {
                             setState(() {
-                              isChecked = value!;
+                              e['remove'] = value!;
+                              if (value) {
+                                // remove checkmark
+                                e['remove'] = true;
+                              } else {
+                                // add checkmark
+                                e['remove'] = false;
+                              }
                             });
                           },
                         )
