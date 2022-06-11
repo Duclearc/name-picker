@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:startup_namer/button_icon_round.dart';
 import 'package:english_words/english_words.dart';
 import 'package:startup_namer/selected_names.dart';
+import 'package:startup_namer/selected_name_object.dart';
 
 class RandomWords extends StatefulWidget {
   const RandomWords({Key? key}) : super(key: key);
@@ -13,7 +14,7 @@ class RandomWords extends StatefulWidget {
 class _RandomWordsState extends State<RandomWords> {
   final _initialPlaceholderText = 'Press the blue button to start';
   String _suggestedName = '';
-  final _selectedNames = [];
+  final List<SelectedNameObject> _selectedNames = [];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,7 +23,7 @@ class _RandomWordsState extends State<RandomWords> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             Padding(
-                padding: const EdgeInsets.symmetric(vertical: 50.0),
+                padding: const EdgeInsets.only(top: 50.0, bottom: 30.0),
                 child: Column(
                   // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -62,10 +63,10 @@ class _RandomWordsState extends State<RandomWords> {
               onPressed: () => setState(() {
                 // remove from list
                 _selectedNames
-                    .removeWhere((element) => element['remove'] == true);
+                    .removeWhere((element) => element.remove == true);
                 // if _suggestedName isn't on the list, remove checkmark
                 if (_selectedNames.indexWhere(
-                        (element) => element['name'] == _suggestedName) <
+                        (element) => element.name == _suggestedName) <
                     0) {
                   _suggestedName = _suggestedName.replaceAll(RegExp(' ✅'), '');
                 }
@@ -79,7 +80,7 @@ class _RandomWordsState extends State<RandomWords> {
                 if (_suggestedName.contains('✅')) {
                   return;
                 }
-                _selectedNames.add({'name': _suggestedName, 'remove': false});
+                _selectedNames.add(SelectedNameObject(_suggestedName));
                 _suggestedName = '$_suggestedName ✅';
               }),
             ),
