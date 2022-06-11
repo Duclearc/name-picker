@@ -34,12 +34,15 @@ class _SelectedNamesState extends State<SelectedNames> {
                     width: 300,
                     height: 100,
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          e['name'],
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(fontSize: 25),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 10.0),
+                          child: Text(
+                            e['name'],
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(fontSize: 25),
+                          ),
                         ),
                         Checkbox(
                           value: e['remove'],
