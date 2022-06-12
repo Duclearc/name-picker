@@ -4,8 +4,12 @@ import 'package:startup_namer/name_card.dart';
 
 class SelectedNames extends StatefulWidget {
   final List selectedNames;
+  final Function disableRemoveButton;
 
-  const SelectedNames({Key? key, required this.selectedNames})
+  const SelectedNames(
+      {Key? key,
+      required this.selectedNames,
+      required this.disableRemoveButton})
       : super(key: key);
 
   @override
@@ -25,8 +29,8 @@ class _SelectedNamesState extends State<SelectedNames> {
           children: widget.selectedNames
               .map(
                 (e) => NameCard(
-                  selectedNameObject: e,
-                ),
+                    selectedNameObject: e,
+                    disableRemoveButton: widget.disableRemoveButton),
               )
               .toList(),
         ),

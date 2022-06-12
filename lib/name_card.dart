@@ -4,7 +4,12 @@ import 'package:startup_namer/selected_name_object.dart';
 
 class NameCard extends StatefulWidget {
   final SelectedNameObject selectedNameObject;
-  const NameCard({Key? key, required this.selectedNameObject})
+  final Function disableRemoveButton;
+
+  const NameCard(
+      {Key? key,
+      required this.selectedNameObject,
+      required this.disableRemoveButton})
       : super(key: key);
 
   @override
@@ -43,12 +48,13 @@ class _NameCardState extends State<NameCard> {
                 setState(() {
                   widget.selectedNameObject.remove = value!;
                   if (value) {
-                    // remove checkmark
+                    // add checkmark
                     widget.selectedNameObject.remove = true;
                   } else {
-                    // add checkmark
+                    // remove checkmark
                     widget.selectedNameObject.remove = false;
                   }
+                  widget.disableRemoveButton();
                 });
               },
             )

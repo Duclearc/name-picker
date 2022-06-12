@@ -14,6 +14,19 @@ class _RandomWordsState extends State<RandomWords> {
   final _initialPlaceholderText = 'Press the blue button to start';
   String _suggestedName = '';
   final List<SelectedNameObject> _selectedNames = [];
+  bool removeButtonIsDisabled = true;
+
+  void disableRemoveButton() {
+    setState(() {
+      //sets the state of removeButtonState to loading once button is pressed
+      if (_selectedNames.isEmpty || !_selectedNames.any((e) => e.remove)) {
+        removeButtonIsDisabled = true;
+      } else {
+        removeButtonIsDisabled = false;
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,31 +35,33 @@ class _RandomWordsState extends State<RandomWords> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             Padding(
-                padding: const EdgeInsets.only(top: 50.0, bottom: 30.0),
-                child: Column(
-                  // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      _suggestedName.isEmpty
-                          ? _initialPlaceholderText
-                          : _suggestedName,
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(fontSize: 38),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 20.0),
-                      child: FloatingActionButton(
-                        onPressed: () => setState(
-                          () {
-                            _suggestedName = WordPair.random().asPascalCase;
-                          },
-                        ),
-                        child: const Icon(Icons.replay),
+              padding: const EdgeInsets.only(top: 50.0, bottom: 30.0),
+              child: Column(
+                children: [
+                  Text(
+                    _suggestedName.isEmpty
+                        ? _initialPlaceholderText
+                        : _suggestedName,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(fontSize: 38),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 20.0),
+                    child: FloatingActionButton(
+                      onPressed: () => setState(
+                        () {
+                          _suggestedName = WordPair.random().asPascalCase;
+                        },
                       ),
-                    )
-                  ],
-                )),
-            SelectedNames(selectedNames: _selectedNames),
+                      child: const Icon(Icons.replay),
+                    ),
+                  )
+                ],
+              ),
+            ),
+            SelectedNames(
+                selectedNames: _selectedNames,
+                disableRemoveButton: disableRemoveButton),
           ],
         ),
       ),
@@ -56,17 +71,19 @@ class _RandomWordsState extends State<RandomWords> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             ButtonIconRound(
-              state: _selectedNames.isEmpty,
+              state: removeButtonIsDisabled,
               color: Colors.red,
               icon: Icons.remove,
               onPressed: () => setState(() {
                 // remove from list
-                _selectedNames.removeWhere((element) => element.remove == true);
+                _selectedNames.removeWhere((e) => e.remove == true);
                 // if _suggestedName isn't on the list, remove checkmark
-                bool nameNotInList = !_selectedNames.any((e) => e.name.allMatches(_suggestedName).isNotEmpty);
+                bool nameNotInList = !_selectedNames
+                    .any((e) => e.name.allMatches(_suggestedName).isNotEmpty);
                 if (nameNotInList) {
                   _suggestedName = _suggestedName.replaceAll(RegExp(' ✅'), '');
                 }
+                disableRemoveButton();
               }),
             ),
             ButtonIconRound(
