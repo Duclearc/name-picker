@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
 
+import 'package:startup_namer/name_card.dart';
+
 class SelectedNames extends StatefulWidget {
   final List selectedNames;
+  final Function disableRemoveButton;
 
-  const SelectedNames({Key? key, required this.selectedNames})
+  const SelectedNames(
+      {Key? key,
+      required this.selectedNames,
+      required this.disableRemoveButton})
       : super(key: key);
 
   @override
@@ -11,9 +17,9 @@ class SelectedNames extends StatefulWidget {
 }
 
 class _SelectedNamesState extends State<SelectedNames> {
+  bool isChecked = false;
   @override
   Widget build(BuildContext context) {
-    // return Text(widget.selectedNames.toString());
     return Flexible(
       child: Scrollbar(
         thumbVisibility: true,
@@ -21,7 +27,11 @@ class _SelectedNamesState extends State<SelectedNames> {
         child: ListView(
           shrinkWrap: true,
           children: widget.selectedNames
-              .map((e) => Text(e, textAlign: TextAlign.center))
+              .map(
+                (e) => NameCard(
+                    selectedNameObject: e,
+                    disableRemoveButton: widget.disableRemoveButton),
+              )
               .toList(),
         ),
       ),

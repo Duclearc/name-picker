@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
-
-import 'package:startup_namer/button_icon_round.dart';
 import 'package:english_words/english_words.dart';
+import 'package:flutter/material.dart';
+import 'package:startup_namer/button_icon_round.dart';
+import 'package:startup_namer/selected_name_object.dart';
 import 'package:startup_namer/selected_names.dart';
 
 class RandomWords extends StatefulWidget {
@@ -11,9 +11,22 @@ class RandomWords extends StatefulWidget {
 }
 
 class _RandomWordsState extends State<RandomWords> {
-  final initialPlaceholderText = 'Press the blue button to start';
-  String suggestedName = '';
-  final selectedNames = [];
+  final _initialPlaceholderText = 'Press the blue button to start';
+  String _suggestedName = '';
+  final List<SelectedNameObject> _selectedNames = [];
+  bool removeButtonIsDisabled = true;
+
+  void disableRemoveButton() {
+    setState(() {
+      //sets the state of removeButtonState to loading once button is pressed
+      if (_selectedNames.isEmpty || !_selectedNames.any((e) => e.remove)) {
+        removeButtonIsDisabled = true;
+      } else {
+        removeButtonIsDisabled = false;
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,20 +34,34 @@ class _RandomWordsState extends State<RandomWords> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            Text(
-              suggestedName.isEmpty ? initialPlaceholderText : suggestedName,
-              textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 38),
-            ),
-            FloatingActionButton(
-              onPressed: () => setState(
-                () {
-                  suggestedName = WordPair.random().asPascalCase;
-                },
+            Padding(
+              padding: const EdgeInsets.only(top: 50.0, bottom: 30.0),
+              child: Column(
+                children: [
+                  Text(
+                    _suggestedName.isEmpty
+                        ? _initialPlaceholderText
+                        : _suggestedName,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(fontSize: 38),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 20.0),
+                    child: FloatingActionButton(
+                      onPressed: () => setState(
+                        () {
+                          _suggestedName = WordPair.random().asPascalCase;
+                        },
+                      ),
+                      child: const Icon(Icons.replay),
+                    ),
+                  )
+                ],
               ),
-              child: const Icon(Icons.replay),
             ),
-            SelectedNames(selectedNames: selectedNames),
+            SelectedNames(
+                selectedNames: _selectedNames,
+                disableRemoveButton: disableRemoveButton),
           ],
         ),
       ),
@@ -44,22 +71,35 @@ class _RandomWordsState extends State<RandomWords> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             ButtonIconRound(
-              state: suggestedName.isEmpty,
+              state: removeButtonIsDisabled,
               color: Colors.red,
               icon: Icons.remove,
               onPressed: () => setState(() {
-                selectedNames.removeWhere((element) =>
-                    element == suggestedName.replaceAll(RegExp(' ✅'), ''));
-                suggestedName = suggestedName.replaceAll(RegExp(' ✅'), '');
+                // remove from list
+                _selectedNames.removeWhere((e) => e.remove == true);
+                // if _suggestedName isn't on the list, remove checkmark
+                bool nameNotInList = !_selectedNames
+                    .any((e) => e.name.allMatches(_suggestedName).isNotEmpty);
+                if (nameNotInList) {
+                  _suggestedName = _suggestedName.replaceAll(RegExp(' ✅'), '');
+                }
+                disableRemoveButton();
               }),
             ),
             ButtonIconRound(
-              state: suggestedName.isEmpty,
+              state: _suggestedName.isEmpty,
               color: Colors.green,
               icon: Icons.check,
               onPressed: () => setState(() {
-                selectedNames.add(suggestedName);
-                suggestedName = '$suggestedName ✅';
+                bool nameAlreadyInList = _suggestedName.contains('✅') ||
+                    _selectedNames.isNotEmpty &&
+                        _selectedNames
+                            .contains(SelectedNameObject(_suggestedName));
+                if (nameAlreadyInList) {
+                  return;
+                }
+                _selectedNames.add(SelectedNameObject(_suggestedName));
+                _suggestedName = '$_suggestedName ✅';
               }),
             ),
           ],

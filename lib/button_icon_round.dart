@@ -16,14 +16,17 @@ class ButtonIconRound extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextButton(
-      onPressed: state ? null : onPressed,
-      style: TextButton.styleFrom(
-          primary: Colors.white,
-          backgroundColor: state ? Colors.grey[300] : color,
-          shape: const CircleBorder(),
-          padding: const EdgeInsets.all(15.0)),
-      child: Icon(icon),
+    return Padding(
+      padding: const EdgeInsets.all(10.0),
+      child: TextButton(
+        onPressed: state ? null : onPressed,
+        style: TextButton.styleFrom(
+            primary: Colors.white,
+            backgroundColor: state ? Colors.grey[300] : color,
+            shape: const CircleBorder(),
+            padding: const EdgeInsets.all(15.0)),
+        child: Icon(icon),
+      ),
     );
   }
 }
