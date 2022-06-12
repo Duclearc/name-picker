@@ -1,9 +1,8 @@
-import 'package:flutter/material.dart';
-
-import 'package:startup_namer/button_icon_round.dart';
 import 'package:english_words/english_words.dart';
-import 'package:startup_namer/selected_names.dart';
+import 'package:flutter/material.dart';
+import 'package:startup_namer/button_icon_round.dart';
 import 'package:startup_namer/selected_name_object.dart';
+import 'package:startup_namer/selected_names.dart';
 
 class RandomWords extends StatefulWidget {
   const RandomWords({Key? key}) : super(key: key);
@@ -62,12 +61,10 @@ class _RandomWordsState extends State<RandomWords> {
               icon: Icons.remove,
               onPressed: () => setState(() {
                 // remove from list
-                _selectedNames
-                    .removeWhere((element) => element.remove == true);
+                _selectedNames.removeWhere((element) => element.remove == true);
                 // if _suggestedName isn't on the list, remove checkmark
-                if (_selectedNames.indexWhere(
-                        (element) => element.name == _suggestedName) <
-                    0) {
+                bool nameNotInList = !_selectedNames.any((e) => e.name.allMatches(_suggestedName).isNotEmpty);
+                if (nameNotInList) {
                   _suggestedName = _suggestedName.replaceAll(RegExp(' ✅'), '');
                 }
               }),
@@ -77,7 +74,11 @@ class _RandomWordsState extends State<RandomWords> {
               color: Colors.green,
               icon: Icons.check,
               onPressed: () => setState(() {
-                if (_suggestedName.contains('✅')) {
+                bool nameAlreadyInList = _suggestedName.contains('✅') ||
+                    _selectedNames.isNotEmpty &&
+                        _selectedNames
+                            .contains(SelectedNameObject(_suggestedName));
+                if (nameAlreadyInList) {
                   return;
                 }
                 _selectedNames.add(SelectedNameObject(_suggestedName));
